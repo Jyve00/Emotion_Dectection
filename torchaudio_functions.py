@@ -20,6 +20,11 @@ import pandas as pd
 import time
 from IPython.display import Audio, display
 
+import torch 
+import torchaudio
+import torchaudio.functional as F 
+import torchaudio.transforms as T   
+
 
 if __name__ == '__main__':
     freeze_support()
@@ -280,3 +285,22 @@ def benchmark_resample(
     return elapsed / iters
 
 
+###### 
+
+def mfcc_transform = T.MFCC(
+  sample_rate=sample_rate, 
+  n_mfcc=n_mfcc, 
+  melkwargs={
+    'n_fft': n_fft, 
+    'n_mels': n_mels, 
+    'hop_length': hop_length, 
+    'mel_scale': 'htk'
+  }
+)
+
+
+
+
+
+
+#### function for iterating through folders 
