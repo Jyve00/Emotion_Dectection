@@ -66,25 +66,24 @@ class EmotionSpeechDataset(Dataset):
     def _get_audio_sample_label(self, index):
         return self.annotations.iloc[index, 1]
 
-
 if __name__ == "__main__":
-    ANNOTATIONS_FILE = '/Users/stephen/Emotion_Dectection/data/RAVDESS/metadata.csv'
-    AUDIO_DIR = '/Users/stephen/Emotion_Dectection/data/RAVDESS/Audio_Speech_Actors_01-24/'
+    ANNOTATIONS_FILE = "/Users/stephen/Emotion_Dectection/data/RAVDESS/metadata.csv"
+    AUDIO_DIR = "/Users/stephen/Emotion_Dectection/data/RAVDESS/Audio_Speech_Actors_01-24"
     SAMPLE_RATE = 16000
     NUM_SAMPLES = 16000
 
     if torch.cuda.is_available():
-        device = 'cuda'
-    else: 
-        device = 'cpu'
+        device = "cuda"
+    else:
+        device = "cpu"
+    print(f"Using device {device}")
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
-        sample_rate =SAMPLE_RATE, 
-        n_fft = 1024, 
-        hop_length = 512, 
+        sample_rate=SAMPLE_RATE,
+        n_fft=1024,
+        hop_length=512,
         n_mels=64
     )
-
 
     emo = EmotionSpeechDataset(ANNOTATIONS_FILE, AUDIO_DIR, mel_spectrogram, SAMPLE_RATE, NUM_SAMPLES, device )
     print(f"There are {len(emo)} samples in the dataset.")
