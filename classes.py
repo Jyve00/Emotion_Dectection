@@ -5,7 +5,17 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 
 
+
+
+
+
+
+
+
 BATCH_SIZE = 128
+EPOCHS = 10
+LEARNING_RATE = .001
+
 
 class FeedForwardNet(nn.Module):
 
@@ -41,6 +51,37 @@ def download_mnist_datasets():
     )
     return train_data, validation_data
 
+
+def train_one_epoch(model, data_loader, loss_fn, optimiser, device):
+    for inputs, target in data_loader: 
+        inputs, target = inputs.to(device), target.to(device)
+
+
+        # calculate loss
+        predictions = model(inputs)
+        loss = loss_fn(predictions, target)
+
+        # backpropagate loss and updateweights
+        optimiser.zero_grad()
+        loss.backward()
+        optimiser.step()
+
+    print(f"Loss: {loss.item()}")
+  
+
+
+def train(model, data_loader, loss_fn, optimiser, device, EPOCHS):
+
+    for i in range(EPOCHS):
+        print(f"Epoch {i+1}") 
+        train_one_epoch(model, data_loader, loss_fn, optimiser, device)
+        print("-------------------------")
+    print("Training")
+
+
+
+  
+
 if __name__ == '__main__':
     # download MNIST dataset 
     train_data, _ = download_mnist_datasets()
@@ -58,8 +99,14 @@ if __name__ == '__main__':
     print(f"Using {device} device")
     feed_forward_net = FeedForwardNet().to(device)
 
+    # instantiate loss function + optimiser 
+    loss_fn = nn.CrossEntropyLoss
+    optimiser = torch.optim.Adam(feed_forward_net.parameters(), lr = LEARNING_RATE
+    )
+
+    # train model 
+    train(feed_forward_net, train_data_loader, loss_fn, optimiser, device, EPOCHS)
 
 
-
-
-
+torch.save(feed_forward_net.state_dict(), "feedforwardnet.pth")
+print('Model trained and stored at feedforwathdp')

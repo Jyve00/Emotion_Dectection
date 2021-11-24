@@ -26,9 +26,6 @@ import torchaudio.functional as F
 import torchaudio.transforms as T   
 
 
-if __name__ == '__main__':
-    freeze_support()
-    ...
 
 [width, height] = matplotlib.rcParams['figure.figsize']
 if width < 10:
@@ -128,13 +125,13 @@ def plot_mel_fbank(fbank, title=None):
   axs.set_xlabel('mel bin')
   plt.show(block=False)
 
-def get_spectrogram(
+def get_spectrogram(waveform, 
     n_fft = 400,
     win_len = None,
     hop_len = None,
-    power = 2.0,
-):
-  waveform, _ = get_speech_sample()
+    power = 2.0,):
+
+  
   spectrogram = T.Spectrogram(
       n_fft=n_fft,
       win_length=win_len,
@@ -285,18 +282,21 @@ def benchmark_resample(
     return elapsed / iters
 
 
+
+
+
 ###### 
 
-def mfcc_transform = T.MFCC(
-  sample_rate=sample_rate, 
-  n_mfcc=n_mfcc, 
-  melkwargs={
-    'n_fft': n_fft, 
-    'n_mels': n_mels, 
-    'hop_length': hop_length, 
-    'mel_scale': 'htk'
-  }
-)
+#def mfcc_transform = T.MFCC(
+  #sample_rate=sample_rate, 
+  #n_mfcc=n_mfcc, 
+  #melkwargs={
+    #'n_fft': n_fft, 
+    #'n_mels': n_mels, 
+    #'hop_length': hop_length, 
+    #'mel_scale': 'htk'
+  #}
+#)
 
 
 
