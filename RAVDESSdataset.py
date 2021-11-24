@@ -1,4 +1,5 @@
 # https://www.youtube.com/watch?v=88FFnqt5MNI&ab_channel=ValerioVelardo-TheSoundofAI
+import os
 import torch
 from torch.utils.data import Dataset
 import pandas as pd
@@ -53,22 +54,24 @@ class EmotionSpeechDataset(Dataset):
         return signal
 
     def _mix_down_if_necessary(self, signal):
-        if signal.shape[0] > 1: # (2, 1000)
+        if signal.shape[0] > 1:
             signal = torch.mean(signal, dim=0, keepdim=True)
-        return signal 
-
+        return signal
 
     def _get_audio_sample_path(self, index):
-        #fold = f"fold{self.annotations.iloc[index, 1]}"
-        path = self.annotations.iloc[index, 2]
-        return path 
+        fold = f"fold{self.annotations.iloc[index, 5]}"
+        path = os.path.join(self.audio_dir, fold, self.annotations.iloc[
+            index, 0])
+        return path
+
+ 
 
     def _get_audio_sample_label(self, index):
         return self.annotations.iloc[index, 1]
 
 if __name__ == "__main__":
     ANNOTATIONS_FILE = "/Users/stephen/Emotion_Dectection/data/RAVDESS/metadata.csv"
-    AUDIO_DIR = "/Users/stephen/Emotion_Dectection/data/RAVDESS/Audio_Speech_Actors_01-24"
+    AUDIO_DIR = "/Users/stephen/Emotion_Dectection/data/RAVDESS/Audio_Speech_Actors_01-24/"
     SAMPLE_RATE = 16000
     NUM_SAMPLES = 16000
 
@@ -87,5 +90,6 @@ if __name__ == "__main__":
 
     emo = EmotionSpeechDataset(ANNOTATIONS_FILE, AUDIO_DIR, mel_spectrogram, SAMPLE_RATE, NUM_SAMPLES, device )
     print(f"There are {len(emo)} samples in the dataset.")
-    signal, label = emo[1]
+    signal, label = emo
+    
 
