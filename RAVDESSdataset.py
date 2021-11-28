@@ -9,7 +9,7 @@ import torchaudio
 class EmotionSpeechDataset(Dataset):
 
     def __init__(self, annotations_file, audio_dir, transformation, target_sample_rate, num_samples, device):
-        self.annotations = pd.read_csv(annotations_file)
+        self.annotations = pd.read_csv(annotations_file, index_col=[0])
         self.audio_dir = audio_dir
         self.device = device 
         self.transformation = transformation.to(self.device)
@@ -59,9 +59,10 @@ class EmotionSpeechDataset(Dataset):
         return signal
 
     def _get_audio_sample_path(self, index):
-        fold = f"fold{self.annotations.iloc[index, 5]}"
-        path = os.path.join(self.audio_dir, fold, self.annotations.iloc[
-            index, 0])
+        #fold = f"fold{self.annotations.iloc[index, 5]}"
+        #path = os.path.join(self.audio_dir, fold, self.annotations.iloc[
+            #index, 0])
+        path = self.annotations.iloc[index, 3]
         return path
 
  
@@ -70,7 +71,7 @@ class EmotionSpeechDataset(Dataset):
         return self.annotations.iloc[index, 1]
 
 if __name__ == "__main__":
-    ANNOTATIONS_FILE = "/Users/stephen/Emotion_Dectection/data/RAVDESS/metadata.csv"
+    ANNOTATIONS_FILE = "/Users/stephen/Emotion_Dectection/data/RAVDESS/Ravdess.csv"
     AUDIO_DIR = "/Users/stephen/Emotion_Dectection/data/RAVDESS/Audio_Speech_Actors_01-24/"
     SAMPLE_RATE = 16000
     NUM_SAMPLES = 16000
@@ -90,6 +91,7 @@ if __name__ == "__main__":
 
     emo = EmotionSpeechDataset(ANNOTATIONS_FILE, AUDIO_DIR, mel_spectrogram, SAMPLE_RATE, NUM_SAMPLES, device )
     print(f"There are {len(emo)} samples in the dataset.")
-    signal, label = emo
+    signal, label = emo[0]
+    
     
 
